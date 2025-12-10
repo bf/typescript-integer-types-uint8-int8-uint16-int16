@@ -9,6 +9,8 @@ I wanted to ensure that code like `foo([0xFF, 0xAA])` only works with `uint8` (`
 With these explicitly defined types TypeScript will do the following:
 
 ```typescript
+import { uint8 } from './uint16.ts'
+
 let byteArrayInTypescript: uint8[] = [
   0,          // ok
   0xff,       // ok
@@ -20,16 +22,26 @@ let byteArrayInTypescript: uint8[] = [
   -1,         // [ERROR]: Type '-1' is not assignable to type 'uint8'.
   0xDD0000FF  // [ERROR]: Type '3707764991' is not assignable to type 'uint8'.
 ]
-```
 
-and 
-
-```typescript
 function foobar (arr: uint8[]) {};
 
 foobar([1, 2, 3]) // works
 foobar([0x33, 0x44, 0x55]) // works
 foobar([0xDD0000FF])  // [ERROR]: Type '3707764991' is not assignable to type 'uint8'.
 ```
+
+and
+
+```typescript
+import { uint16 } from './uint16.ts'
+
+const arrInt16: uint16[] = [
+  1,
+  333.3, // [ERROR]: Type '333.3' is not assignable to type 'uint16'.
+  65536,
+  65538  // [ERROR]: Type '65538' is not assignable to type 'uint16'.
+]
+```
+
 
 This was prompted by issue https://github.com/microsoft/TypeScript/issues/62867#issuecomment-3634574290
